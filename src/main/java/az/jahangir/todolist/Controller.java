@@ -170,12 +170,12 @@ public class Controller {
         String selected = filterComboBox.getValue();
         ObservableList<ToDoItem> allItems = ToDoData.getInstance().getToDoItemList();
 
-        if (selected.equals("All")) {
-            toDoListView.setItems(allItems);
-        } else if (selected.equals("Today")) {
-            toDoListView.setItems(allItems.filtered(item -> item.getDeadline().isEqual(LocalDate.now())));
-        } else if (selected.equals("Upcoming")) {
-            toDoListView.setItems(allItems.filtered(item -> item.getDeadline().isAfter(LocalDate.now())));
+        switch (selected) {
+            case "All" -> toDoListView.setItems(allItems);
+            case "Today" ->
+                    toDoListView.setItems(allItems.filtered(item -> item.getDeadline().isEqual(LocalDate.now())));
+            case "Upcoming" ->
+                    toDoListView.setItems(allItems.filtered(item -> item.getDeadline().isAfter(LocalDate.now())));
         }
 
         toDoListView.getSelectionModel().selectFirst();

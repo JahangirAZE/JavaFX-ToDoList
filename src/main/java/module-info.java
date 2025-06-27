@@ -5,4 +5,5 @@ module az.jahangir.todolist {
 
     opens az.jahangir.todolist to javafx.fxml;
     exports az.jahangir.todolist;
+    exports az.jahangir.todolist.model;
 }
