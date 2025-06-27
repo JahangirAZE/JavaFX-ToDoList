@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import java.lang.String?>
+<BorderPane fx:id="mainBorderPane" fx:controller="az.jahangir.todolist.Controller" xmlns:fx="http://javafx.com/fxml">
+
+  <top>
+    <VBox>
+      <MenuBar>
+        <Menu text="File">
+          <MenuItem text="New" onAction="#showNewItemDialog" />
+          <SeparatorMenuItem />
+          <MenuItem text="Exit" />
+        </Menu>
+      </MenuBar>
+      <ToolBar style="-fx-padding: 5 10 5 10; -fx-background-color: #f8f8f8;">
+        <HBox spacing="10">
+          <Label text="Filter:" />
+          <ComboBox fx:id="filterComboBox" onAction="#filterList" prefWidth="150">
+            <items>
+              <FXCollections fx:factory="observableArrayList">
+                <String fx:value="All" />
+                <String fx:value="Today" />
+                <String fx:value="Upcoming" />
+              </FXCollections>
+            </items>
+          </ComboBox>
+          <Region HBox.hgrow="ALWAYS" />
+          <Button text="New" onAction="#showNewItemDialog" styleClass="btn-primary" />
+        </HBox>
+      </ToolBar>
+    </VBox>
+  </top>
+
+  <left>
+    <ListView fx:id="toDoListView" onKeyPressed="#handleKeyPressed" />
+  </left>
+
+  <center>
+    <VBox style="-fx-background-color: white">
+      <TextArea fx:id="itemDetailsTextArea" VBox.vgrow="ALWAYS" wrapText="true" />
+      <HBox>
+        <Label text="Due: " style="-fx-background-color: white">
+          <font>
+            <Font name="Times New Roman bold" size="20" />
+          </font>
+        </Label>
+        <Label fx:id="deadlineLabel" style="-fx-background-color: white">
+          <font>
+            <Font name="Times New Roman bold" size="20" />
+          </font>
+        </Label>
+      </HBox>
+    </VBox>
+  </center>
+
+</BorderPane>

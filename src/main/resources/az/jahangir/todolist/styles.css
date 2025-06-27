@@ -1,0 +1,32 @@
+.list-cell {
+    -fx-font-size: 14px;
+    -fx-padding: 8px;
+}
+
+.text-area {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 14px;
+}
+
+.combo-box {
+    -fx-background-color: #e0e0e0;
+    -fx-padding: 4px;
+}
+
+.button {
+    -fx-font-size: 13px;
+    -fx-background-color: #0078D7;
+    -fx-text-fill: white;
+}
+
+.button.btn-primary {
+    -fx-background-color: #0078D7;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 6 16;
+    -fx-background-radius: 5;
+}
+
+.tool-bar {
+    -fx-background-color: #f4f4f4;
+}
