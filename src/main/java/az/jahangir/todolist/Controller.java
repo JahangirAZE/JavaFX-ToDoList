@@ -5,16 +5,26 @@ import az.jahangir.todolist.model.ToDoItem;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.util.Callback;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Controller {
@@ -44,7 +54,7 @@ public class Controller {
         MenuItem updateMenuItem = new MenuItem("Update");
         updateMenuItem.setOnAction(event -> {
             ToDoItem selectedItem = toDoListView.getSelectionModel().getSelectedItem();
-            if (selectedItem != null) {
+            if (Objects.nonNull(selectedItem)) {
                 showEditItemDialog(selectedItem);
             }
         });
@@ -52,7 +62,7 @@ public class Controller {
         listContextMenu.getItems().addAll(updateMenuItem, deleteMenuItem);
 
         toDoListView.getSelectionModel().selectedItemProperty().addListener((observableValue, toDoItem, t1) -> {
-            if (t1 != null) {
+            if (Objects.nonNull(t1)) {
                 ToDoItem item = toDoListView.getSelectionModel().getSelectedItem();
                 itemDetailsTextArea.setText(item.getDetails());
                 DateTimeFormatter df = DateTimeFormatter.ofPattern("MMMM d, yyyy");
@@ -64,30 +74,24 @@ public class Controller {
         toDoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         toDoListView.getSelectionModel().selectFirst();
 
-        toDoListView.setCellFactory(new Callback<>() {
+        toDoListView.setCellFactory(listView -> new ListCell<>() {
             @Override
-            public ListCell<ToDoItem> call(ListView<ToDoItem> toDoItemListView) {
-                return new ListCell<>() {
-                    @Override
-                    protected void updateItem(ToDoItem item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item == null) {
-                            setText(null);
-                            setContextMenu(null);
-                        } else {
-                            setText(item.getShortDescription());
+            protected void updateItem(ToDoItem item, boolean empty) {
+                super.updateItem(item, empty);
 
-                            if (item.getDeadline().isBefore(LocalDate.now().plusDays(1))) {
-                                setTextFill(Color.RED);
-                            } else if (item.getDeadline().equals(LocalDate.now().plusDays(1))) {
-                                setTextFill(Color.ORANGE);
-                            } else {
-                                setTextFill(Color.BLACK);
-                            }
-                            setContextMenu(listContextMenu);
-                        }
-                    }
-                };
+                if (empty || Objects.isNull(item)) {
+                    setText(null);
+                    setContextMenu(null);
+                    return;
+                }
+
+                setText(item.getShortDescription());
+                LocalDate deadline = item.getDeadline();
+                LocalDate tomorrow = LocalDate.now().plusDays(1);
+
+                setTextFill(deadline.isBefore(tomorrow) ? Color.RED : deadline.equals(tomorrow) ? Color.ORANGE : Color.BLACK);
+
+                setContextMenu(listContextMenu);
             }
         });
     }
@@ -132,7 +136,7 @@ public class Controller {
     @FXML
     public void handleKeyPressed(KeyEvent keyEvent) {
         ToDoItem selectedItem = toDoListView.getSelectionModel().getSelectedItem();
-        if (selectedItem != null && keyEvent.getCode() == KeyCode.DELETE) {
+        if (Objects.nonNull(selectedItem) && keyEvent.getCode() == KeyCode.DELETE) {
             deleteItem(selectedItem);
         }
     }
@@ -167,15 +171,12 @@ public class Controller {
 
     @FXML
     public void filterList() {
-        String selected = filterComboBox.getValue();
         ObservableList<ToDoItem> allItems = ToDoData.getInstance().getToDoItemList();
 
-        switch (selected) {
+        switch (filterComboBox.getValue()) {
             case "All" -> toDoListView.setItems(allItems);
-            case "Today" ->
-                    toDoListView.setItems(allItems.filtered(item -> item.getDeadline().isEqual(LocalDate.now())));
-            case "Upcoming" ->
-                    toDoListView.setItems(allItems.filtered(item -> item.getDeadline().isAfter(LocalDate.now())));
+            case "Today" -> toDoListView.setItems(allItems.filtered(item -> item.getDeadline().isEqual(LocalDate.now())));
+            case "Upcoming" -> toDoListView.setItems(allItems.filtered(item -> item.getDeadline().isAfter(LocalDate.now())));
         }
 
         toDoListView.getSelectionModel().selectFirst();

@@ -1,35 +1,19 @@
 package az.jahangir.todolist.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class ToDoItem {
 
     private String shortDescription;
     private String details;
     private LocalDate deadline;
-
-    public ToDoItem(String shortDescription, String details, LocalDate deadline) {
-        this.shortDescription = shortDescription;
-        this.details = details;
-        this.deadline = deadline;
-    }
-
-    public String getShortDescription() {
-        return shortDescription;
-    }
-    public void setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
-    }
-    public String getDetails() {
-        return details;
-    }
-    public void setDetails(String details) {
-        this.details = details;
-    }
-    public LocalDate getDeadline() {
-        return deadline;
-    }
-    public void setDeadline(LocalDate deadline) {
-        this.deadline = deadline;
-    }
 }

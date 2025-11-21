@@ -1,6 +1,7 @@
 module az.jahangir.todolist {
     requires javafx.controls;
     requires javafx.fxml;
+    requires static lombok;
 
 
     opens az.jahangir.todolist to javafx.fxml;
